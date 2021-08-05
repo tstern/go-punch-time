@@ -1,0 +1,144 @@
+openapi: 3.0.1
+info:
+  title: Punch-Time
+  description: Web-Application to track working time.
+  contact:
+    email: thomas-stern@live.de
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost/v1
+tags:
+- name: tasks
+  description: The tasks which were worked on
+paths:
+  /tasks:
+    get:
+      tags:
+      - tasks
+      summary: Get list of tasks
+      description: Range of date can be specified with query parameter 'lastDays'
+      parameters:
+      - name: lastDays
+        in: query
+        description: Range of date to retrieve tasks
+        example: ?lastDays=31
+        schema:
+          type: number
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+    post:
+      tags:
+      - tasks
+      summary: Add new task
+      requestBody:
+        description: New task object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Invalid start date
+  /tasks/{id}:
+    get:
+      tags: 
+      - tasks
+      summary: Get specific task
+      parameters: 
+      - in: path
+        name: id
+        description: ObjectID of task
+        required: true
+        schema:
+          $ref: '#/components/schemas/Task'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        404:
+          description: Not Found
+    put:
+      tags: 
+      - tasks
+      summary: Update specific task
+      parameters: 
+      - in: path
+        name: id
+        description: ObjectID of task
+        required: true
+        schema:
+          $ref: '#/components/schemas/Task'
+      requestBody:
+        description: Updated task object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        404:
+          description: Not Found
+    delete:
+      tags: 
+      - tasks
+      summary: Delete specific task
+      parameters: 
+      - in: path
+        name: id
+        description: ObjectID of task
+        required: true
+        schema:
+          $ref: '#/components/schemas/Task'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int64
+        end:
+          type: integer
+          format: int64
+        text:
+          type: string
+        type:
+          type: string
