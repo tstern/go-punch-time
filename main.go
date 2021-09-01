@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/sternth/go-punch-time/routes"
+	"github.com/sternth/go-punch-time/utils"
 )
 
 var port string
@@ -17,7 +18,7 @@ func init() {
 }
 
 func main() {
+	utils.ConnectDb()
 	fmt.Printf("Start Server: http://localhost:%v/\n", port)
 	routes.NewRouter(port)
-
 }
