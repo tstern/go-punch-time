@@ -2,39 +2,31 @@ package handler
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sternth/go-punch-time/store"
 	"github.com/sternth/go-punch-time/utils"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Task struct {
-	ID    primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
-	Start int64              `json:"start"`
-	End   int64              `json:"end"`
-	Text  string             `json:"text"`
-	Type  string             `json:"type"`
+type TaskController struct {
+	store *store.TaskStore
 }
 
-func GetTasks(e echo.Context) error {
-	ctx := e.Request().Context()
-	db := utils.ConnectDb()
+func NewTaskController(db *mongo.Database) *TaskController {
 	collection := db.Collection("tasks")
-	lastDate := getLastDate(e)
-	filter := bson.M{"start": bson.M{"$gte": lastDate}}
-	cursor, err := collection.Find(ctx, filter)
-	if err != nil {
-		log.Fatal(err)
+	return &TaskController{
+		store: store.NewTaskStore(collection),
 	}
-	defer cursor.Close(ctx)
-	var tasks []Task
-	if err = cursor.All(ctx, &tasks); err != nil {
-		log.Fatal(err)
+}
+
+func (ctrl *TaskController) GetTasks(e echo.Context) error {
+	tasks, err := ctrl.store.FindAll(e.Request())
+	if err != nil {
+		e.String(http.StatusInternalServerError, err.Error())
 	}
 	return e.JSON(http.StatusOK, tasks)
 }
