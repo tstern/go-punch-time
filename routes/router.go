@@ -19,11 +19,11 @@ func NewRouter(port string) {
 
 	e.GET("/", handler.RootHandler)
 	e.GET("/ping", handler.PingHandler)
-	e.GET("/tasks", taskCtrl.GetTasks)
-	e.POST("/tasks", handler.CreateTask)
-	e.GET("/tasks/:id", handler.GetTask)
-	e.PUT("/tasks/:id", handler.UpdateTask)
-	e.DELETE("/tasks/:id", handler.DeleteTask)
+	e.GET("/tasks", taskCtrl.GetAll)
+	e.POST("/tasks", taskCtrl.Create)
+	e.GET("/tasks/:id", taskCtrl.GetTask)
+	e.PUT("/tasks/:id", taskCtrl.Update)
+	e.DELETE("/tasks/:id", taskCtrl.Delete)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", port)))
 }
