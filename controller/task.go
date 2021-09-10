@@ -6,8 +6,8 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
-	"github.com/sternth/go-punch-time/model"
-	"github.com/sternth/go-punch-time/store"
+	"github.com/tstern/go-punch-time/model"
+	"github.com/tstern/go-punch-time/store"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )

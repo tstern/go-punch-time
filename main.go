@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/sternth/go-punch-time/route"
-	"github.com/sternth/go-punch-time/utils"
+	"github.com/tstern/go-punch-time/route"
+	"github.com/tstern/go-punch-time/utils"
 )
 
 func main() {

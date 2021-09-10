@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/sternth/go-punch-time/model"
+	"github.com/tstern/go-punch-time/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

@@ -1,4 +1,4 @@
-module github.com/sternth/go-punch-time
+module github.com/tstern/go-punch-time
 
 go 1.16
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/sternth/go-punch-time/controller"
+	"github.com/tstern/go-punch-time/controller"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
