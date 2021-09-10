@@ -1,24 +1,36 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"context"
+	"flag"
+	"log"
+	"time"
 
-	"github.com/sternth/go-punch-time/routes"
+	"github.com/joho/godotenv"
+	"github.com/sternth/go-punch-time/route"
 	"github.com/sternth/go-punch-time/utils"
 )
 
-var port string
-
-func init() {
-	var ok bool
-	if port, ok = os.LookupEnv("PUNCH_TIME_PORT"); !ok {
-		port = "8080"
-	}
-}
-
 func main() {
-	utils.ConnectDb()
-	fmt.Printf("Start Server: http://localhost:%v/\n", port)
-	routes.NewRouter(port)
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("failed loading .env file: %v", err)
+	}
+
+	port := flag.String("p", "8080", "port for webserver")
+	flag.Parse()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	uri := utils.CreateDbURI()
+	db, err := utils.ConnectDb(ctx, uri)
+	if err != nil {
+		log.Fatalf("couldn't connect to database: %v", err)
+	}
+
+	err = route.NewRouter(*port, db)
+	if err != nil {
+		log.Fatalf("couldn't start server: %v", err)
+	}
 }
