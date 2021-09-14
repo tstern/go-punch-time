@@ -4,17 +4,21 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func ConnectDb(ctx context.Context, uri string) (*mongo.Database, error) {
+func ConnectDb(uri string) (*mongo.Database, error) {
 	var dbName string
 	var ok bool
 	if dbName, ok = os.LookupEnv("MONGO_DB"); !ok {
 		dbName = "punchTime"
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
 	clientOptions := options.Client().ApplyURI(uri)
 	dbClient, err := mongo.Connect(ctx, clientOptions)

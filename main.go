@@ -1,10 +1,9 @@
 package main
 
 import (
-	"context"
 	"flag"
+	"fmt"
 	"log"
-	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/tstern/go-punch-time/route"
@@ -20,15 +19,15 @@ func main() {
 	port := flag.String("p", "8080", "port for webserver")
 	flag.Parse()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
+	fmt.Println("connecting to database ...")
 	uri := utils.CreateDbURI()
-	db, err := utils.ConnectDb(ctx, uri)
+	db, err := utils.ConnectDb(uri)
 	if err != nil {
 		log.Fatalf("couldn't connect to database: %v", err)
 	}
+	fmt.Println("connected to database")
 
+	fmt.Println("starting server ...")
 	err = route.NewRouter(*port, db)
 	if err != nil {
 		log.Fatalf("couldn't start server: %v", err)
