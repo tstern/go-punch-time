@@ -45,7 +45,7 @@ func (ctrl *TaskController) Create(e echo.Context) error {
 	var task model.Task
 
 	if err := e.Bind(&task); err != nil {
-		return err
+		return e.String(http.StatusBadRequest, err.Error())
 	}
 
 	ctx := e.Request().Context()
