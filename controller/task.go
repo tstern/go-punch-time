@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -12,8 +13,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type Store interface {
+	Find(ctx context.Context, id primitive.ObjectID) (*model.Task, error)
+	FindAll(ctx context.Context, lastDays int) ([]model.Task, error)
+	Create(ctx context.Context, task *model.Task) error
+	Update(ctx context.Context, id primitive.ObjectID, task *model.Task) error
+	Delete(ctx context.Context, id primitive.ObjectID) error
+}
+
 type TaskController struct {
-	store *store.TaskStore
+	store Store
 }
 
 func NewTaskController(db *mongo.Database) *TaskController {
