@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/tstern/go-punch-time/common"
 	"github.com/tstern/go-punch-time/model"
 	"github.com/tstern/go-punch-time/store"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -77,7 +78,7 @@ func (ctrl *TaskController) GetTask(e echo.Context) error {
 	ctx := e.Request().Context()
 	task, err = ctrl.store.Find(ctx, docId)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		if err == common.ErrNotFound {
 			return e.String(http.StatusNotFound, fmt.Sprintf("task with id %s not found", id))
 		} else {
 			return e.String(http.StatusInternalServerError, err.Error())

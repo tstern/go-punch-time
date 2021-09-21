@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/tstern/go-punch-time/common"
 	"github.com/tstern/go-punch-time/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -27,7 +28,11 @@ func (store *TaskStore) Find(ctx context.Context, id primitive.ObjectID) (*model
 
 	err := store.collection.FindOne(ctx, filter).Decode(&task)
 	if err != nil {
-		return nil, err
+		if err == mongo.ErrNoDocuments {
+			return nil, common.ErrNotFound
+		} else {
+			return nil, err
+		}
 	}
 
 	return &task, nil
